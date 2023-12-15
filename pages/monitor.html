@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style/monitor.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+
+<body>
+    <div class="title">PLANT ROOM MONITORING SYSTEM</div>
+    <div class="home">
+        <div class="home__info">
+            <div class="home__info--show">
+                <div class="details temp">
+                    <p class="temperature"><i class="fa-solid fa-temperature-three-quarters"></i> Temperature</p>
+                    <p class="temperatureValue"></p>
+                    <canvas id="temperatureChart" width="250" height="250"></canvas>
+                </div>
+
+                <div class="details hum">
+                    <p class="humidity"><i class="fa-solid fa-droplet"></i> Humidity</p>
+                    <p class="humidityValue"></p>
+                    <canvas id="humidityChart" width="250" height="250"></canvas>
+                </div>
+            </div>
+
+            <p class="message"><i class="fa-solid fa-circle-exclamation"></i>Nhiệt độ, độ ẩm vượt ngưỡng cho phép! SOS</p>
+
+            <div class="home__info--btn">
+                <p class="steam">Đang kích hoạt hệ thống phun sương!</p>
+                <div class="button">
+                    <a class="phun-btn stop">Phun sương</a>
+                    <a href="/pages/home.html" class="back-btn stop">Trở lại</a>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="home__chart">
+            <canvas id="myLineChart" width="800" height="500"></canvas>
+
+            <div class="desc">
+                <div class="bright">
+                    <label for="brightness">Adjust light brightness:</label>
+                    <input type="range" id="brightness" name="brightness" min="0" max="255" value="0">
+                    <span id="brightnessValue">0</span>
+                </div>
+
+                <p class="average" style="color: orangered;">Average temperature: <span class="tempValue">...</span></p>
+                <p class="average" style="color: blue;">Average humidity: <span class="humValue">...</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/script/getPlantApi.js"></script>
+    <script src="/script/addLog.js"></script>
+    <script src="/script/addData.js"></script>
+    <script src="/script/monitor.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+p,
+div {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    width: 100%;
+}
+
+.title {
+    margin: 20px 0px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: brown;
+    text-align: center;
+    width: 100%;
+}
+
+.home {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.home__info {
+    width: 50%;
+    padding: 30px;
+}
+
+.home__chart {
+    width: 50%;
+    padding: 20px;
+    margin: 10px;
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+.home__info--show {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.details {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-family: sans-serif;
+    font-weight: bold;
+    width: 45%;
+    padding: 20px;
+    border: 2px solid white;
+    border-radius: 5px;
+}
+
+.details p {
+    margin-bottom: 50px;
+}
+
+p.temperature,
+.temperatureValue {
+    color: orangered;
+    text-align: center;
+}
+
+p.humidity,
+.humidityValue {
+    color: blue;
+    text-align: center;
+}
+
+#temperatureChart {
+    display: block;
+    box-sizing: border-box;
+}
+
+.home__info--btn {
+    position: fixed;
+    bottom: 50px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 50%;
+}
+
+.home__info--btn a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 35px;
+    font-size: 20px;
+    font-family: sans-serif;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0px 20px;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.phun {
+    color: white;
+    border: 1px solid rgb(11, 148, 167);
+    background-color: rgb(11, 148, 167);
+}
+
+.back-btn:hover {
+    color: white;
+    border: 1px solid rgb(11, 148, 167);
+    background-color: rgb(11, 148, 167);
+}
+
+.stop {
+    color: black;
+    border: 1px solid black;
+    background-color: white;
+}
+
+.message {
+    width: 50%;
+    font-size: 20px;
+    color: red;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    display: none;
+    animation: blink 1.5s infinite;
+    position: fixed;
+}
+
+.message i {
+    margin: 0px 10px;
+}
+
+.steam {
+    font-size: 20px;
+    color: green;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+    display: none;
+}
+
+.desc {
+    position: fixed;
+    bottom: 10px;
+}
+
+.average {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.bright {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+.bright label {
+    font-weight: bold;
+}
+input#brightness {
+    margin: 0px 10px;
+    width: 400px;
+    height: 5px;
+}
+
+input[type="range"] {
+    /* -webkit-appearance: none; */
+    background: red;
+    border-radius: 5px;
+    outline: none;
+    margin: 10px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px; /* Chiều rộng của "đốm trượt" */
+    height: 15px; /* Chiều cao của "đốm trượt" */
+    border-radius: 50%;
+    background: red; /* Màu sắc của "đốm trượt" */
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}

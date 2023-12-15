@@ -1,0 +1,267 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+p,
+div {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    width: 100%;
+    font-family: sans-serif;
+}
+
+.title {
+    margin: 20px 0px;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: brown;
+    text-align: center;
+    width: 100%;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.history {
+    width: 50%;
+}
+
+.input {
+    margin: 10px 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.input input {
+    margin-left: 5px;
+}
+
+.input.type {
+    margin-left: 5px;
+}
+
+table {
+    width: 100%;
+}
+
+tr.name {
+    position: sticky;
+    top: 0px;
+    text-align: center;
+    background-color: cadetblue;
+    color: white;
+    font-size: 17px;
+    height: 30px;
+}
+
+tr {
+    background-color: lightblue;
+    height: 25px;
+    text-align: center;
+}
+
+td i {
+    cursor: pointer;
+}
+
+.nodata {
+    padding: 0px 10px;
+    text-align: center;
+    color: darkgrey;
+    font-size: 13px;
+}
+
+.container {
+    padding-left: 10px;
+    height: 650px;
+    overflow-y: auto;
+}
+
+.adjust {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 50%;
+    padding: 10px 20px;
+}
+
+.image {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 200px;
+    padding: 10px;
+    border: 2px solid blue;
+    border-radius: 10px;
+}
+
+.img {
+    width: 65%;
+    height: 100%;
+}
+img.plant-img {
+    height: 100%;
+    width: auto;
+}
+
+.evaluate {
+    width: 35%;
+    padding: 0px 10px;
+    height: 150px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+p.message {
+    margin: 30px 0px;
+    text-align: center;
+    font-size: 15px;
+    color: grey;
+}
+
+.result-evaluate{
+    font-size: 15px;
+}
+
+.info {
+    margin: 10px 0px;
+}
+
+.info-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.average {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.forecast {
+    width: 49%;
+}
+
+.info-average {
+    width: 49%;
+}
+
+.selection {
+    margin: 20px 0px;
+    width: 100%;
+    height: 30px;
+}
+
+.selection select {
+    height: 100%;
+    width: 300px;
+}
+
+button.find {
+    height: 100%;
+    width: 100px;
+    margin: 0px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+button.find:hover {
+    color: white;
+    background-color: rgb(11, 148, 167);
+    border: 1px solid white;
+}
+
+.plant-info {
+    margin: 10px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: darkslategrey;
+}
+
+.left {
+    width: 49%;
+}
+
+.right {
+    width: 49%;
+}
+
+span {
+    margin: 0px 5px;
+}
+
+.direct {
+    margin: 30px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.direct a {
+    display: flex;
+    height: 35px;
+    width: 150px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid black;
+    text-decoration: none;
+    color: black;
+}
+
+.direct a:hover {
+    color: white;
+    background-color: rgb(11, 148, 167);
+    border: 1px solid white;
+}
+
+.result i {
+    margin-right: 10px;
+}
+
+.result {
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+input.email {
+    height: 100%;
+    width: 300px;
+    text-indent: 5px;
+}
+
+button.set-email {
+    height: 100%;
+    width: 100px;
+    margin: 0px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+button.set-email:hover {
+    color: white;
+    background-color: rgb(11, 148, 167);
+    border: 1px solid white;
+}
