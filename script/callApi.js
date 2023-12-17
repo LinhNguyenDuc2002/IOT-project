@@ -23,10 +23,11 @@ planRef.once('value', function(snapshot) {
     });
     
     selectElement.value = plantValue;
-    getCurrent();
+    getCurrentPlant();
+    getCurrentEmail();
 });
 
-function getCurrent() {
+function getCurrentPlant() {
     currentRef.once('value', async function(snapshot) {
         if (snapshot.exists()) {
             var dataPlant = snapshot.val();
@@ -58,7 +59,9 @@ function getCurrent() {
             console.log("Không có dữ liệu từ snapshot");
         }
     });
+}
 
+function getCurrentEmail() {
     emailRef.once('value', async function(snapshot) {
         if (snapshot.exists()) {
             var email = snapshot.val().address;
@@ -109,27 +112,45 @@ button.addEventListener("click", function() {
     })
     .then(() => {
         console.log('Thiết lập hệ thống trồng cây thành công!');
+        addLog(new Date().getTime(), 'INFO', 'The system has established the ' + current + ' tree!');
+
+        var box = document.querySelector('.confirm-plant');
+        if (box) {
+            box.style.display = 'flex';
+            setTimeout(function() {
+                box.style.display = 'none';
+            }, 3000);
+        }
     }).catch((error) => {
         console.error('Lỗi khi gửi dữ liệu:', error);
     });
 
     // sendAlertEmail();
-    addLog(new Date().getTime(), 'INFO', 'The system has established the ' + current + ' tree!');
-    getCurrent();
+    getCurrentPlant();
 });
 
 var button = document.querySelector(".set-email");
 button.addEventListener("click", function() {
+    var x = document.querySelector('.email').value;
     emailRef.set({
-        address: document.querySelector('.email').value
+        address: x
     })
     .then(() => {
         console.log('Cập nhật mail thành công!');
+        addLog(new Date().getTime(), 'INFO', 'Changed notification email address to ' + x + '!');
+
+        var box = document.querySelector('.confirm-email');
+        if (box) {
+            box.style.display = 'flex';
+            setTimeout(function() {
+                box.style.display = 'none';
+            }, 3000);
+        }
     }).catch((error) => {
         console.error('Lỗi khi gửi dữ liệu:', error);
     });
-    
-    getCurrent();
+
+    getCurrentEmail();
 });
 
 const sensorRef = database.ref('sensor');
@@ -152,23 +173,27 @@ sensorRef.on('value', async (snapshot) => {
     document.querySelector('.tempValue').textContent = tempData + " °C";
     document.querySelector('.humValue').textContent = humData + " %";
 
-    if(tempData >= minTemp && tempData <= maxTemp && humData >= minHum && humData <= maxHum) {
-        icon.className = "fa-solid fa-check";
-        paragraph.textContent = "Good environment";
-        parent.style.color = 'green';
-    }
-    else if(tempData >= maxTemp*1.1 || tempData <= minTemp*0.9 || 
-            humData >= maxHum*1.1 || humData <= minHum*0.9) {
-        icon.className = "fa-solid fa-circle-exclamation";
-        paragraph.textContent = "Bad environment";
-        parent.style.color = 'red';
+    if(minHum != 0 && maxHum != 0 && minTemp != 0 && maxTemp != 0) {
+        if(tempData >= minTemp && tempData <= maxTemp && humData >= minHum && humData <= maxHum) {
+            icon.className = "fa-solid fa-check";
+            paragraph.textContent = "Good environment";
+            parent.style.color = 'green';
+        }
+        else if(tempData >= maxTemp*1.1 || tempData <= minTemp*0.9 || 
+                humData >= maxHum*1.1 || humData <= minHum*0.9) {
+            icon.className = "fa-solid fa-circle-exclamation";
+            paragraph.textContent = "Bad environment";
+            parent.style.color = 'red';
 
-        // sendAlertEmail();
-    }
-    else {
-        icon.className = "fa-solid fa-thumbs-up";
-        paragraph.textContent = "Medium environment";
-        parent.style.color = 'orange';
+            addLog(new Date().getTime(), 'WARN', 'Environmental conditions are not good!');
+
+            // sendAlertEmail();
+        }
+        else {
+            icon.className = "fa-solid fa-thumbs-up";
+            paragraph.textContent = "Medium environment";
+            parent.style.color = 'orange';
+        }
     }
 
     parent.appendChild(icon);

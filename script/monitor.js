@@ -23,6 +23,7 @@ let maxTemp = 0;
 let minHum = 0;
 let maxHum = 0;
 
+const activityRef = database.ref('activity');
 const currentRef = database.ref('current_plant');
 currentRef.once('value', async function(snapshot) {
     if (snapshot.exists()) {
@@ -53,7 +54,14 @@ brightnessRange.addEventListener('input', function() {
         value: gt.toString()
     })
     .then(() => {
-        console.log('Kích hoạt hệ thống phun sương thành công!');
+        console.log('Đã tăng độ sáng đèn!');
+
+        if(gt == 0) {
+            addLog(new Date().getTime(), 'INFO', 'The heating system has been turned off!');
+        }
+        else {
+            addLog(new Date().getTime(), 'INFO', 'The heating lamp system has been turned on at level ' + gt + '!');
+        }
     }).catch((error) => {
         console.error('Lỗi khi gửi dữ liệu:', error);
     });
@@ -98,6 +106,7 @@ button.addEventListener("click", function(){
         })
         .then(() => {
             console.log('Kích hoạt hệ thống phun sương thành công!');
+            addLog(new Date().getTime(), 'INFO', 'The steam system has been activated!');
         }).catch((error) => {
             console.error('Lỗi khi gửi dữ liệu:', error);
         });
@@ -112,6 +121,7 @@ button.addEventListener("click", function(){
         })
         .then(() => {
             console.log('Dừng hệ thống phun sương thành công!');
+            addLog(new Date().getTime(), 'INFO', 'The steam system has been turned off!');
         }).catch((error) => {
             console.error('Lỗi khi gửi dữ liệu:', error);
         });
@@ -223,22 +233,28 @@ sensorRef.on('value', async (snapshot) => {
     humValue.innerHTML = hum + " %";
 
     var check = true;
-    console.log(maxTemp)
-    if (temp > maxTemp || temp < minTemp) {
-        temperature.style.border = "2px solid red";
-        error.style.display = "flex";
-        check = false;
+    if(maxHum != 0 && minHum != 0 && maxTemp != 0 && minTemp != 0) {
+        console.log(1)
+        if (temp >= maxTemp*1.1 || temp <= minTemp*0.9) {
+            temperature.style.border = "2px solid red";
+            error.style.display = "flex";
+            check = false;
+        }
+        if(hum >= maxHum*1.1 || hum <= minHum*0.9) {
+            humidity.style.border = "2px solid red";
+            error.style.display = "flex";
+            check = false;
+        }
     }
-    if(hum > maxHum || hum < minHum) {
-        humidity.style.border = "2px solid red";
-        error.style.display = "flex";
-        check = false;
-    }
+    
 
     if(check) {
         temperature.style.border = "2px solid white";
         humidity.style.border = "2px solid white";
         error.style.display = "none";
+    }
+    else {
+        addLog(new Date().getTime(), 'WARN', 'Environmental conditions are not good!');
     }
 
     updatePieChart(temp, hum);
