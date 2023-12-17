@@ -7,7 +7,6 @@
 #define DHTPIN  13
 DHT dht(DHTPIN, DHTTYPE);
 #define RELAY_PIN 26
-#define steam 18
 #define led  12
 #define heat 25
 #define FIREBASE_HOST "https://iot-g36-default-rtdb.firebaseio.com/" 
@@ -19,6 +18,7 @@ FirebaseAuth auth;
 FirebaseConfig config;
 FirebaseData firebaseData; 
 float temperature, humidity, temp = 0, hum = 0;
+int preValue = 0;
 
 void ketnoiwifi()
 {
@@ -59,20 +59,8 @@ void setup()
   pinMode(RELAY_PIN, OUTPUT);
   pinMode(led, OUTPUT);
   pinMode(heat, OUTPUT);
-  pinMode(steam, OUTPUT);
 
   dht.begin();
-}
-
-String generateRandomKey() {
-  String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
-  String key = "";
-
-  for (int i = 0; i < 20; i++) {
-    key += characters[random(0, characters.length())];
-  }
-
-  return key;
 }
 
 void sendSensor(float tempValue, float humValue) {
@@ -115,13 +103,17 @@ int readBrightness() {
 }
 
 void alertAndSteam(float tempValue, float humValue) {
+  float value1 = 0;
+  float value2 = 0;
+
   if (tempValue >= 30 || humValue >= 70) {
     digitalWrite(led, HIGH);
-    digitalWrite(steam, HIGH);
+    digitalWrite(RELAY_PIN, HIGH);
+    delay(500);
+    digitalWrite(RELAY_PIN, LOW);
   }
   else {
     digitalWrite(led, LOW);
-    digitalWrite(steam, LOW);
   }
 }
 
@@ -156,22 +148,21 @@ void loop()
   }
 
   int steamValue = readSteam();
-  if(steamValue == 1) {
-    digitalWrite(steam, HIGH);
-  }
-  else {
-    digitalWrite(steam, LOW);
+  if(steamValue != preValue) {
+    digitalWrite(RELAY_PIN, HIGH);
+    delay(500);
+    digitalWrite(RELAY_PIN, LOW);
+
+    preValue = steamValue;
   }
 
   int brightness = readBrightness();
   Serial.println(brightness);
   if(brightness > 0) {
     analogWrite(heat, brightness);
-    digitalWrite(RELAY_PIN, HIGH);
   }
   else {
     analogWrite(heat, 0);
-    digitalWrite(RELAY_PIN, LOW);
   }
 
 }

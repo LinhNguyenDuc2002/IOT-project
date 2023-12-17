@@ -74,36 +74,6 @@ function getCurrentEmail() {
     });
 }
 
-function sendAlertEmail() {
-    const nodemailer = require('nodemailer');
-
-    // let transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     auth: {
-    //         user: 'linhlinhlinh16042002@gmail.com',
-    //         pass: 'your_password'
-    //     }
-    // });
-
-    // // Thiết lập các thông tin email
-    // let mailOptions = {
-    //     from: 'your_email@gmail.com', // Địa chỉ email người gửi
-    //     to: 'recipient_email@example.com', // Địa chỉ email người nhận
-    //     subject: 'Subject of the Email', // Tiêu đề email
-    //     text: 'Content of the Email' // Nội dung email
-    // };
-
-    // // Gửi email
-    // transporter.sendMail(mailOptions, function(error, info){
-    //     if (error) {
-    //         console.log(error);
-    //     } else {
-    //         console.log('Email sent: ' + info.response);
-    //     }
-    // });
-}
-
-
 var button = document.querySelector(".find");
 button.addEventListener("click", function() {
     var current = selectElement.value;
@@ -121,23 +91,25 @@ button.addEventListener("click", function() {
                 box.style.display = 'none';
             }, 3000);
         }
+
+        
     }).catch((error) => {
         console.error('Lỗi khi gửi dữ liệu:', error);
     });
 
-    // sendAlertEmail();
     getCurrentPlant();
 });
 
 var button = document.querySelector(".set-email");
 button.addEventListener("click", function() {
     var x = document.querySelector('.email').value;
+    var now = new Date().getTime();
     emailRef.set({
         address: x
     })
     .then(() => {
         console.log('Cập nhật mail thành công!');
-        addLog(new Date().getTime(), 'INFO', 'Changed notification email address to ' + x + '!');
+        addLog(now, 'INFO', 'Changed notification email address to ' + x + '!');
 
         var box = document.querySelector('.confirm-email');
         if (box) {
@@ -146,6 +118,8 @@ button.addEventListener("click", function() {
                 box.style.display = 'none';
             }, 3000);
         }
+
+        sendAlertEmail(content, 1);
     }).catch((error) => {
         console.error('Lỗi khi gửi dữ liệu:', error);
     });
