@@ -18,7 +18,7 @@ FirebaseAuth auth;
 FirebaseConfig config;
 FirebaseData firebaseData; 
 float temperature, humidity, temp = 0, hum = 0;
-int preValue = 0;
+int preValue = 0, preLed = 0;
 
 void ketnoiwifi()
 {
@@ -102,19 +102,21 @@ int readBrightness() {
   return value;
 }
 
-void alertAndSteam(float tempValue, float humValue) {
-  float value1 = 0;
-  float value2 = 0;
+int readLed() {
+  int value = 0;
+  if (Firebase.RTDB.getInt(&firebaseData, "/alert/value")) {
+      if (firebaseData.dataType() == "string") {
+          String stringValue = firebaseData.stringData();
+          value = stringValue.toInt();
+          Serial.println("Alert: " + String(value));
+      } else {
+          Serial.println("Data is not a string.");
+      }
+  } else {
+      Serial.println("Failed to get data from Firebase.");
+  }
 
-  if (tempValue >= 30 || humValue >= 70) {
-    digitalWrite(led, HIGH);
-    digitalWrite(RELAY_PIN, HIGH);
-    delay(500);
-    digitalWrite(RELAY_PIN, LOW);
-  }
-  else {
-    digitalWrite(led, LOW);
-  }
+  return value;
 }
 
 void loop() 
@@ -134,8 +136,6 @@ void loop()
   Serial.println("Temperature: " + String(temperature,2) + "C");
   Serial.println("---");
 
-  alertAndSteam(temperature, humidity);
-
   Serial.println(hum);
   Serial.println(temp);
 
@@ -145,6 +145,24 @@ void loop()
     hum = humidity;
 
     sendSensor(temp, hum);
+  }
+
+  int ledValue = readLed();
+  if(ledValue != preLed && ledValue == 1) {
+    digitalWrite(led, HIGH);
+    digitalWrite(RELAY_PIN, HIGH);
+    delay(500);
+    digitalWrite(RELAY_PIN, LOW);
+
+    preLed = ledValue;
+  }
+  else if(ledValue != preLed) {
+    digitalWrite(led, LOW);
+    digitalWrite(RELAY_PIN, HIGH);
+    delay(500);
+    digitalWrite(RELAY_PIN, LOW);
+
+    preLed = ledValue;
   }
 
   int steamValue = readSteam();
@@ -157,7 +175,6 @@ void loop()
   }
 
   int brightness = readBrightness();
-  Serial.println(brightness);
   if(brightness > 0) {
     analogWrite(heat, brightness);
   }

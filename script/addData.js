@@ -10,3 +10,14 @@ function addData(temp, hum, timestamp) {
         console.error('Lỗi khi gửi dữ liệu:', error);
     });
 }
+
+function sendLed(gt) {
+    alertRef.set({
+        value: gt
+    })
+    .then(() => {
+        console.log('Cảnh báo đèn thành công!');
+    }).catch((error) => {
+        console.error('Lỗi khi gửi dữ liệu:', error);
+    });
+}

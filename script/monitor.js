@@ -25,6 +25,8 @@ let maxHum = 0;
 
 const activityRef = database.ref('activity');
 const currentRef = database.ref('current_plant');
+const alertRef = database.ref('alert');
+const emailRef = database.ref("email");
 currentRef.once('value', async function(snapshot) {
     if (snapshot.exists()) {
         var dataPlant = await snapshot.val();
@@ -234,7 +236,6 @@ sensorRef.on('value', async (snapshot) => {
 
     var check = true;
     if(maxHum != 0 && minHum != 0 && maxTemp != 0 && minTemp != 0) {
-        console.log(1)
         if (temp >= maxTemp*1.1 || temp <= minTemp*0.9) {
             temperature.style.border = "2px solid red";
             error.style.display = "flex";
@@ -252,9 +253,12 @@ sensorRef.on('value', async (snapshot) => {
         temperature.style.border = "2px solid white";
         humidity.style.border = "2px solid white";
         error.style.display = "none";
+        sendLed("0");
     }
     else {
+        sendLed("1");
         addLog(new Date().getTime(), 'WARN', 'Environmental conditions are not good!');
+        alertEnvironment(temp, hum, convertToVNTime(timestamp));
     }
 
     updatePieChart(temp, hum);

@@ -9,6 +9,7 @@ var plantValue;
 const currentRef = database.ref('current_plant');
 const planRef = database.ref('plant');
 const emailRef = database.ref("email");
+const alertRef = database.ref('alert');
 
 planRef.once('value', function(snapshot) {
     var data = snapshot.val();
@@ -92,7 +93,7 @@ button.addEventListener("click", function() {
             }, 3000);
         }
 
-        
+        alertChangePlant(convertToVNTime(now), current);
     }).catch((error) => {
         console.error('Lỗi khi gửi dữ liệu:', error);
     });
@@ -119,7 +120,7 @@ button.addEventListener("click", function() {
             }, 3000);
         }
 
-        sendAlertEmail(content, 1);
+        alertChangeEmail(convertToVNTime(now), x);
     }).catch((error) => {
         console.error('Lỗi khi gửi dữ liệu:', error);
     });
@@ -152,6 +153,7 @@ sensorRef.on('value', async (snapshot) => {
             icon.className = "fa-solid fa-check";
             paragraph.textContent = "Good environment";
             parent.style.color = 'green';
+            sendLed("0");
         }
         else if(tempData >= maxTemp*1.1 || tempData <= minTemp*0.9 || 
                 humData >= maxHum*1.1 || humData <= minHum*0.9) {
@@ -161,15 +163,44 @@ sensorRef.on('value', async (snapshot) => {
 
             addLog(new Date().getTime(), 'WARN', 'Environmental conditions are not good!');
 
-            // sendAlertEmail();
+            sendLed("1");
+
+            alertEnvironment(tempData, humData, convertToVNTime(timestamp));
         }
         else {
             icon.className = "fa-solid fa-thumbs-up";
             paragraph.textContent = "Medium environment";
             parent.style.color = 'orange';
+            sendLed("0");
         }
     }
 
     parent.appendChild(icon);
     parent.appendChild(paragraph);
+
+    average();
 });
+
+function average() {
+    var currentTime = new Date().getTime();
+
+    let averageTemperature = 0;
+    let averageHumidity = 0;
+
+    database.ref('data').orderByChild('timestamp').startAt(currentTime-3600000).endAt(currentTime).once('value', function(snapshot) {
+        var data = snapshot.val();
+        var keys = Object.keys(data);
+
+        for(let i = 0; i<keys.length-1; i++) {
+            let previous = data[keys[i]].timestamp;
+            let after = data[keys[i+1]].timestamp;
+            averageTemperature += data[keys[i]].temperature * (after-previous);
+            averageHumidity += data[keys[i]].humidity * (after-previous);
+        }
+
+        document.querySelector(".tempValue1").innerHTML = (averageTemperature/(currentTime-data[keys[0]].timestamp)).toFixed(2) + " °C / 1h";
+        document.querySelector(".humValue1").innerHTML = (averageHumidity/(currentTime-data[keys[0]].timestamp)).toFixed(2) + " % / 1h";
+    });
+}
+
+setInterval(average, 500);
